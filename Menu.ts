@@ -1,6 +1,13 @@
 import readlineSync from "readline-sync";
 import { colors } from "./src/util/Colors";
 
+// IMPORTS DA SEGUNDA ETAPA
+import { ProdutoRepository } from "./src/repository/ProdutoRepository";
+import { Suplemento } from "./src/model/Suplemento";
+
+// INSTÂNCIA DO CRUD
+const repositorio = new ProdutoRepository();
+
 /* ===================== MENU PRINCIPAL ===================== */
 export function main(): void {
 
