@@ -2,11 +2,12 @@ import readlineSync from "readline-sync";
 import { colors } from "./src/util/Colors";
 
 // IMPORTS DA SEGUNDA ETAPA
-import { ProdutoRepository } from "./src/repository/ProdutoRepository";
-import { Suplemento } from "./src/model/Suplemento";
+import { ProdutoController } from "./src/controller/ProdutoController";
+import { Suplemento } from "./src/model/Suplemento";    // se usar diretamente no menu
+
 
 // INSTÂNCIA DO CRUD
-const repositorio = new ProdutoRepository();
+const controller = new ProdutoController();
 
 /* ===================== MENU PRINCIPAL ===================== */
 export function main(): void {

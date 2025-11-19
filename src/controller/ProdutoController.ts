@@ -6,9 +6,9 @@
 // ======================================================================
 
 import { Produto } from "../model/Produto";
-import { IProdutoRepository } from "./IProdutoRepository";
+import { IProdutoRepository } from "../repository/IProdutoRepository";
 
-export class ProdutoRepository implements IProdutoRepository {
+export class ProdutoController implements IProdutoRepository {
 
     // ------------------------------------------------------------------
     // Armazena produtos cadastrados → simulando um banco de dados
