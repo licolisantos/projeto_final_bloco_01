@@ -1,5 +1,5 @@
 import readlineSync from "readline-sync";
-import { colors } from "./util/Colors";
+import { colors } from "./src/util/Colors";
 
 /* ===================== MENU PRINCIPAL ===================== */
 export function main(): void {
