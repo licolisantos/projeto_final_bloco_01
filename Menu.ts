@@ -1,12 +1,12 @@
 import readlineSync from "readline-sync";
 import { colors } from "./src/util/Colors";
 
-// IMPORTS DA SEGUNDA ETAPA
-import { ProdutoRepository } from "./src/repository/ProdutoRepository";
+// IMPORTAR CONTROLLER E MODEL
+import { ProdutoController } from "./src/controller/ProdutoController";
 import { Suplemento } from "./src/model/Suplemento";
 
-// INSTÂNCIA DO CRUD
-const repositorio = new ProdutoRepository();
+// INSTÂNCIA DO CONTROLLER
+const controller = new ProdutoController();
 
 /* ===================== MENU PRINCIPAL ===================== */
 export function main(): void {
@@ -28,7 +28,7 @@ ${colors.fg.cyan}═════════════════════
             2 - Listar Produtos
             3 - Buscar Por Código
             4 - Atualizar Ficha Técnica
-            5 - Deletar Item 
+            5 - Deletar Produto
             0 - Encerrar
 
 ══════════════════════════════════════════════════════════════════════════
@@ -47,31 +47,90 @@ ${colors.reset}
         }
 
         switch (opcao) {
+
+            /* ======================== CADASTRAR ======================== */
             case 1:
-                console.log(colors.fg.cyan,
-                    "\nVocê escolheu: Cadastrar Novo Produto\n", colors.reset);
+                console.clear();
+                console.log("=== Cadastrar Novo Produto ===");
+
+                const codigo = readlineSync.questionInt("Código: ");
+                const nome = readlineSync.question("Nome: ");
+                const preco = readlineSync.questionFloat("Preço: ");
+                const descricao = readlineSync.question("Descrição: ");
+                const tipo = readlineSync.question("Tipo: ");
+                const peso = readlineSync.question("Peso (ex: 300g, 1kg): ");
+
+                const novoProd = new Suplemento(
+                    codigo,
+                    nome,
+                    preco,
+                    descricao,
+                    tipo,
+                    peso
+                );
+
+                controller.cadastrar(novoProd);
                 break;
 
+            /* ======================== LISTAR ======================== */
             case 2:
-                console.log(colors.fg.cyan,
-                    "\nVocê escolheu: Listar Produtos\n", colors.reset);
+                console.clear();
+                console.log("=== Lista de Produtos ===");
+                controller.listar();
                 break;
 
+            /* ======================== BUSCAR ======================== */
             case 3:
-                console.log(colors.fg.cyan,
-                    "\nVocê escolheu: Buscar Produto por Código\n", colors.reset);
+                console.clear();
+                console.log("=== Buscar Produto ===");
+
+                const codigoBusca = readlineSync.questionInt("Digite o código do produto: ");
+                const encontrado = controller.buscarPorCodigo(codigoBusca);
+
+                if (encontrado)
+                    encontrado.visualizar();
+                else
+                    console.log("\n❌ Produto não encontrado!\n");
+
                 break;
 
+            /* ======================== ATUALIZAR ======================== */
             case 4:
-                console.log(colors.fg.cyan,
-                    "\nVocê escolheu: Atualizar Ficha Técnica do Produto\n", colors.reset);
+                console.clear();
+                console.log("=== Atualizar Produto ===");
+
+                const codigoAtualizar = readlineSync.questionInt("Digite o código: ");
+
+                console.log("Informe os NOVOS dados:");
+                const nomeNovo = readlineSync.question("Nome: ");
+                const precoNovo = readlineSync.questionFloat("Preço: ");
+                const descNova = readlineSync.question("Descrição: ");
+                const tipoNovo = readlineSync.question("Tipo: ");
+                const pesoNovo = readlineSync.question("Peso: ");
+
+                const prodAtualizado = new Suplemento(
+                    codigoAtualizar,
+                    nomeNovo,
+                    precoNovo,
+                    descNova,
+                    tipoNovo,
+                    pesoNovo
+                );
+
+                controller.atualizar(codigoAtualizar, prodAtualizado);
                 break;
 
+            /* ======================== DELETAR ======================== */
             case 5:
-                console.log(colors.fg.cyan,
-                    "\nVocê escolheu: Deletar Produto\n", colors.reset);
+                console.clear();
+                console.log("=== Deletar Produto ===");
+
+                const codigoDel = readlineSync.questionInt("Digite o código: ");
+                controller.deletar(codigoDel);
+
                 break;
 
+            /* ======================== OPÇÃO INVÁLIDA ======================== */
             default:
                 console.log(colors.fg.red,
                     "\nOpção inválida! Por favor, escolha um número entre 0 e 5.\n",
@@ -86,9 +145,7 @@ ${colors.reset}
 
 main();
 
-
 /* ===================== SOBRE ===================== */
-
 function sobre(): void {
     console.log(`
 ${colors.fg.cyan}══════════════════════════════════════════════════════════════════════════
@@ -104,11 +161,8 @@ ${colors.reset}
 }
 
 /* ===================== KEY PRESS ===================== */
-
 function keyPress(): void {
     console.log(colors.reset, "");
     console.log("\nPressione ENTER para continuar...");
     readlineSync.prompt();
 }
-
-main();
